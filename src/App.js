@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+
+import LaunchpadAgent from './LaunchpadAgent/LaunchpadAgent';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.onDeviceConnected = this.onDeviceConnected.bind(this);
+    this.onLaunchpadButtonPressed = this.onLaunchpadButtonPressed.bind(this);
 
-export default App;
+    this._launchpadAgent = new LaunchpadAgent();
+    this._launchpadAgent._onDeviceConnectedCB = this.onDeviceConnected;
+    this._launchpadAgent._onButtonPressedCB = this.onLaunchpadButtonPressed;
+
+    this.state = {
+      deviceName: ''
+    };
+  }
+
+  onDeviceConnected(name) {
+    this.setState({
+      deviceName: name
+    });
+  }
+
+  onLaunchpadButtonPressed(coords) {
+    console.log(coords);
+  }
+
+  render() {
+    const deviceNameTag = (this.state.deviceName) ? <p>{this.state.deviceName} connected</p> : null;
+
+    return (
+      <div className="sp-app">
+        <header className="sp-app-header">
+          <h1>Spotpad</h1>
+          {deviceNameTag}
+        </header>
+      </div>
+    );
+  }
+};
