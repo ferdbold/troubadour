@@ -26,6 +26,7 @@ export default class App extends Component {
   }
 
   onLaunchpadButtonPressed(coords) {
+    // TODO: Implement
     console.log(coords);
   }
 
