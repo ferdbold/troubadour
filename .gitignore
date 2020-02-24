@@ -125,3 +125,7 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+### TEMPLATE ENDS HERE
+
+spotify-keys.json
