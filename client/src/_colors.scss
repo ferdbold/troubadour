@@ -1,0 +1,10 @@
+// Backgrounds
+$bg-color: #282c34;
+
+// Buttons
+$button-bg-color: lighten($bg-color, 15%);
+$button-border-color: lighten($button-bg-color, 5%);
+
+// Text
+$text-color: #efefef;
+$link-color: #61dafb;

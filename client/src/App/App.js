@@ -3,9 +3,9 @@ import Cookies from 'universal-cookie';
 import request from 'request';
 import _ from 'lodash';
 
-import LaunchpadAgent from './LaunchpadAgent/LaunchpadAgent';
+import LaunchpadAgent from '../LaunchpadAgent/LaunchpadAgent';
 
-import './App.css';
+import './App.scss';
 
 export default class App extends Component {
   constructor(props) {
@@ -119,8 +119,8 @@ export default class App extends Component {
 
     const playbackButtons = (this.state.accessToken)
       ? <span>
-          <button onClick={this.play}>Play</button>
-          <button onClick={this.pause}>Pause</button>
+          <button className="sp-button" onClick={this.play}>Play</button>
+          <button className="sp-button" onClick={this.pause}>Pause</button>
         </span>
       : null;
 
