@@ -11,7 +11,8 @@
     "dotenv": "^8.2.0"
   },
   "scripts": {
-    "start": "concurrently \"yarn run server\" \"yarn --cwd ./client start\"",
+    "start": "yarn run server",
+    "dev-start": "concurrently \"yarn run server\" \"yarn --cwd ./client start\"",
     "server": "node index.js",
     "heroku-postbuild": "cd client && yarn && yarn run build"
   },
