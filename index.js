@@ -1,7 +1,8 @@
+const cookieParser = require('cookie-parser');
 const express = require('express');
+const path = require('path');
 const querystring = require('querystring');
 const request = require('request');
-const cookieParser = require('cookie-parser');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -22,6 +23,9 @@ const stateKey = 'spotify_auth_state';
 /** SERVER CONFIGURATION */
 const app = express();
 app.use(cookieParser());
+
+// Only used in production, makes the server serve React files
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.set('port', process.env.PORT || 3001);
 
@@ -109,6 +113,12 @@ app.get('/get_token', (req, res) => {
       );
     }
   });
+});
+
+// Catchall handler: makes the server serve React whenever we don't
+// match a route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
 app.listen(app.get('port'), () => {

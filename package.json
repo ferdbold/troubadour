@@ -12,7 +12,8 @@
   },
   "scripts": {
     "start": "concurrently \"yarn run server\" \"yarn --cwd ./client start\"",
-    "server": "node index.js"
+    "server": "node index.js",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "dependencies": {
     "cookie-parser": "^1.4.4",
