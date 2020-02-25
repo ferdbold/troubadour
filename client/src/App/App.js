@@ -17,9 +17,12 @@ export default class App extends Component {
     this.pause = this.pause.bind(this);
 
     this._cookies = new Cookies();
-    this._launchpadAgent = new LaunchpadAgent();
-    this._launchpadAgent._onDeviceConnectedCB = this.onDeviceConnected;
-    this._launchpadAgent._onButtonPressedCB = this.onLaunchpadButtonPressed;
+
+    if (navigator.requestMIDIAccess) {
+      this._launchpadAgent = new LaunchpadAgent();
+      this._launchpadAgent._onDeviceConnectedCB = this.onDeviceConnected;
+      this._launchpadAgent._onButtonPressedCB = this.onLaunchpadButtonPressed;
+    }
 
     this.state = {
       deviceName: '',
@@ -114,7 +117,7 @@ export default class App extends Component {
     const deviceNameTag = (this.state.deviceName) ? <p>{this.state.deviceName} connected</p> : null;
 
     const loginLink = (!this.state.accessToken)
-      ? <a href={'http://' + process.env.REACT_APP_SERVER_URI + '/login'}>Log in with Spotify</a>
+    ? <a href={'http://' + process.env.REACT_APP_SERVER_URI + '/login'}>Log in with Spotify</a>
       : null;
 
     const playbackButtons = (this.state.accessToken)
@@ -124,15 +127,22 @@ export default class App extends Component {
         </span>
       : null;
 
-    return (
-      <div className="sp-app">
-        <header className="sp-app-header">
+    const body = (navigator.requestMIDIAccess)
+      ? <header className="sp-app-header">
           <h1>Spotpad</h1>
           {deviceNameTag}
           {loginLink}
 
           {playbackButtons}
         </header>
+      : <header className="sp-app-header">
+          <h1>Spotpad</h1>
+          <p>MIDI isn't supported or allowed on this browser.</p>
+        </header>;
+
+    return (
+      <div className="sp-app">
+        {body}
       </div>
     );
   }
