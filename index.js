@@ -79,22 +79,8 @@ app.get('/get_token', (req, res) => {
   request.post(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
 
-      let access_token = body.access_token,
-          refresh_token = body.refresh_token;
-
-      let options = {
-        url: 'https://api.spotify.com/v1/me',
-        headers: { 'Authorization': 'Bearer ' + access_token },
-        json: true
-      };
-
-      // use the access token to access the Spotify Web API
-      request.get(options, (error, response, body) => {
-        console.log('BODY PRINTED');
-        //console.log(body);
-      });
-
-      console.log('SUCCESS');
+      const access_token = body.access_token,
+            refresh_token = body.refresh_token;
 
       res.redirect(process.env.REDIRECT_URI + '?' +
         querystring.stringify({
