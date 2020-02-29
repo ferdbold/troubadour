@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import './Topnav.scss';
+import './Header.scss';
 import imgSpotifyLogo from 'spotify-logo-black.png';
 
-export default class Topnav extends Component {
+export default class Header extends Component {
   render() {
     const name = (this.props.userData) ? this.props.userData.display_name : '';
     const avatar = (_.has(this.props, 'userData.images') && !_.isEmpty(this.props.userData.images))
@@ -27,7 +27,7 @@ export default class Topnav extends Component {
     );
 
     return (
-      <nav className="uk-navbar sp-topnav">
+      <nav className="uk-navbar sp-header">
         <div className="uk-navbar-left">
 
         </div>
@@ -42,6 +42,6 @@ export default class Topnav extends Component {
   }
 }
 
-Topnav.propTypes = {
+Header.propTypes = {
   userData: PropTypes.object.isRequired
 };

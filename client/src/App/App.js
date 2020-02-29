@@ -3,11 +3,14 @@ import Cookies from 'universal-cookie';
 import request from 'request';
 import _ from 'lodash';
 
+import Footer from 'Footer/Footer';
+import Header from 'Header/Header';
+import Home from 'Home/Home';
 import LaunchpadAgent from 'LaunchpadAgent/LaunchpadAgent';
-import Topnav from 'Topnav/Topnav';
+import Login from 'Login/Login';
 
+import ApiContext from './ApiContext';
 import './App.scss';
-import imgSpotifyLogo from 'spotify-logo-black.png';
 
 export default class App extends Component {
   constructor(props) {
@@ -16,8 +19,6 @@ export default class App extends Component {
     this.onLaunchpadButtonPressed = this.onLaunchpadButtonPressed.bind(this);
     this.checkSpotifyConnection = this.checkSpotifyConnection.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
-    this.play = this.play.bind(this);
-    this.pause = this.pause.bind(this);
 
     this._cookies = new Cookies();
 
@@ -49,26 +50,6 @@ export default class App extends Component {
     if (!prevState.accessToken && this.state.accessToken) {
       this.fetchUserData();
     }
-  }
-
-  play() {
-    const params = {
-      url: 'https://api.spotify.com/v1/me/player/play',
-      headers: { 'Authorization': 'Bearer ' + this.state.accessToken },
-      json: true
-    };
-
-    request.put(params);
-  }
-
-  pause() {
-    const params = {
-      url: 'https://api.spotify.com/v1/me/player/pause',
-      headers: { 'Authorization': 'Bearer ' + this.state.accessToken },
-      json: true
-    };
-
-    request.put(params);
   }
 
   checkSpotifyConnection() {
@@ -131,40 +112,17 @@ export default class App extends Component {
   }
 
   render() {
-    const deviceNameTag = (this.state.deviceName) ? <p>{this.state.deviceName} connected</p> : null;
-
-    const loginForm = (!this.state.accessToken)
-      ? <div>
-          <h1>Welcome to Spotpad</h1>
-          <a className="uk-button uk-button-default sp-spotify-login" href={process.env.REACT_APP_SERVER_URI + '/login'}>
-            <img src={imgSpotifyLogo} alt="Spotify Logo" />
-            Login with Spotify
-          </a>
-        </div>
-      : null;
-
-    const playbackButtons = (this.state.accessToken)
-      ? <span>
-          <button className="uk-button uk-button-primary" onClick={this.play}>Play</button>
-          <button className="uk-button uk-button-primary" onClick={this.pause}>Pause</button>
-        </span>
-      : null;
-
-    const body = (navigator.requestMIDIAccess)
-      ? <div>
-          {deviceNameTag}
-          {loginForm}
-
-          {playbackButtons}
-        </div>
-      : <p>MIDI isn't supported or allowed on this browser.</p>;
-
     return (
       <div className="sp-app">
-        <Topnav userData={this.state.userData} />
-        <header className="sp-app-header">
-          {body}
-        </header>
+        <Header userData={this.state.userData} />
+
+        {(!this.state.accessToken)
+          ? <Login />
+          : <ApiContext.Provider value={{ accessToken: this.state.accessToken }}>
+              <Home />
+            </ApiContext.Provider>}
+
+        <Footer />
       </div>
     );
   }
