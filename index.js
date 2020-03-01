@@ -30,11 +30,16 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.set('port', process.env.PORT || 3001);
 
 app.get('/login', (req, res) => {
-  let state = generateRandomString(16);
+  const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
-  let scope = 'user-read-private user-read-email user-modify-playback-state';
+  const scope = [
+    'user-library-read',
+    'user-modify-playback-state',
+    'user-read-private',
+    'user-read-email'
+  ].join(' ');
+
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -47,9 +52,9 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/get_token', (req, res) => {
-  let code = req.query.code || null;
-  let state = req.query.state || null;
-  let storedState = req.cookies ? req.cookies[stateKey] : null;
+  const code = req.query.code || null;
+  const state = req.query.state || null;
+  const storedState = req.cookies ? req.cookies[stateKey] : null;
 
   // Early return if state is mismatched
   if (state === null || state !== storedState) {

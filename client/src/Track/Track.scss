@@ -1,0 +1,23 @@
+@import '_colors.scss';
+
+.sp-app .sp-track {
+  border: 1px solid lighten($bg-color, 3%);
+  border-radius: 5px;
+  padding: 0.5em;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: transparentize($spotify-green, 0.3);
+  }
+
+  img {
+    float: left;
+    width: 42px;
+    padding-right: 0.5em;
+  }
+
+  .sp-track-artist {
+    color: darken($text-color, 30%);
+    line-height: 0.85em;
+  }
+}
