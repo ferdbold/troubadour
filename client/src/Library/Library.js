@@ -32,7 +32,9 @@ export default class Library extends Component {
     };
 
     request.get(params, (error, response, body) => {
-      this.setState({ savedTracks: JSON.parse(body).items });
+      if (!error) {
+        this.setState({ savedTracks: JSON.parse(body).items });
+      }
     });
   }
 
