@@ -1,32 +1,65 @@
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const mongoDB = require('mongodb').MongoClient;
 const path = require('path');
 
-const auth = require('./auth');
+const AuthRoutes = require('./AuthRoutes');
 
 if (process.env.NODE_ENV !== 'production') {
   const dotenv = require('dotenv');
   dotenv.config();
 }
 
-module.exports = () => {
-  const app = express();
-  app.use(cookieParser());
+module.exports = class Spotpad {
+  constructor() {
+    this.setupExpress = this.setupExpress.bind(this);
+    this.setupMongo = this.setupMongo.bind(this);
+    this.closeMongo = this.closeMongo.bind(this);
+    this.launch = this.launch.bind(this);
 
-  // Only used in production, makes the server serve React files
-  app.use(express.static(path.join(__dirname, 'client/build')));
+    this.setupExpress();
+    this.setupMongo();
+    this._authRoutes = new AuthRoutes(this);
 
-  app.set('port', process.env.PORT || 3001);
+    // Catchall handler: makes the server serve React whenever we don't
+    // match a route
+    this._express.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname+'/client/build/index.html'));
+    });
 
-  // AUTH
-  app.get('/login', auth.onLogin);
-  app.get('/get_token', auth.onGetToken);
+    // TODO: Wait until Mongo is ready to do this
+    this.launch();
+  }
 
-  // Catchall handler: makes the server serve React whenever we don't
-  // match a route
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
+  setupExpress() {
+    const app = express();
+    app.use(cookieParser());
 
-  return app;
-};
+    // Only used in production, makes the server serve React files
+    app.use(express.static(path.join(__dirname, 'client/build')));
+
+    app.set('port', process.env.PORT || 3001);
+
+    this._express = app;
+  }
+
+  setupMongo() {
+    const db = new mongoDB(process.env.DATABASE_URI, { useNewUrlParser: true });
+    db.connect((err) => {
+      if (err === null) {
+        console.log('Mongo connected');
+        this._mongo = db.db('spotpad');
+      }
+    });
+  }
+
+  closeMongo() {
+    this._mongo.close();
+  }
+
+  launch() {
+    this._express.listen(this._express.get('port'), () => {
+      console.log(`Find the server at: http://localhost:${this._express.get('port')}/`); // eslint-disable-line no-console
+    });
+  }
+}

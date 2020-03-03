@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "yarn run server",
-    "dev-start": "concurrently \"yarn run server\" \"yarn --cwd ./client start\"",
+    "dev-start": "concurrently \"yarn run server\" \"yarn --cwd ./client start\" \"mongo\"",
     "server": "node index.js",
     "heroku-postbuild": "cd client && yarn && yarn run build"
   },

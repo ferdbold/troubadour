@@ -62,7 +62,6 @@ export default class Library extends Component {
           return (
             <ul className="uk-list">
               {this.state.savedTracks.map((track, i) => {
-                if (i === 0) console.log(track);
                 return (
                   <li key={'track-' + i}>
                     <Track info={track} />
