@@ -24,12 +24,7 @@ module.exports = class Spotpad {
     // Catchall handler: makes the server serve React whenever we don't
     // match a route
     this._express.get('*', (req, res) => {
-      if (process.env.NODE_ENV === 'production') {
-        res.sendFile(path.join('/app/client/build/index.html'));
-      }
-      else {
-        res.sendFile(path.join(__dirname+'/client/build/index.html'));
-      }
+      res.sendFile(path.join('./client/build/index.html'));
     });
 
     // TODO: Wait until Mongo is ready to do this
