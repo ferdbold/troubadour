@@ -133,5 +133,5 @@ module.exports = class AuthRoutes {
         );
       }
     });
-  };
+  }
 }

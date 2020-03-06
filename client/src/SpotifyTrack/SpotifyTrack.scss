@@ -1,0 +1,43 @@
+@import '_colors.scss';
+
+.sp-app .sp-spotify-track {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid transparentize($button-bg-color, 0.8);
+  border-radius: 5px;
+  padding: 0.5em;
+  text-align: left;
+  line-height: 1.3em;
+  transition: border-color 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    border-color: $button-bg-color;
+
+    .sp-spotify-track-add {
+      opacity: 1;
+    }
+  }
+
+  img {
+    float: left;
+    width: 42px;
+    padding-right: 0.5em;
+  }
+
+  .sp-spotify-track-artist {
+    color: darken($text-color, 30%);
+  }
+
+  .sp-spotify-track-add {
+    position: relative;
+    float: right;
+    top: 4px;
+    padding: 1em;
+    opacity: 0;
+    background-color: $spotify-green;
+    transition: opacity 0.3s;
+  }
+}

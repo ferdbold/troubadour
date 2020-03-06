@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import request from 'request';
 
 import ApiContext from 'App/ApiContext';
-import Track from 'Track/Track';
+import SpotifyTrack from 'SpotifyTrack/SpotifyTrack';
 
-import './Library.scss';
+import './SpotifySearch.scss';
 
-export default class Library extends Component {
+export default class SpotifySearch extends Component {
   static contextType = ApiContext;
 
   static Tabs = Object.freeze({ SavedTracks: 0, Playlists: 1, Search: 2 });
@@ -18,7 +18,7 @@ export default class Library extends Component {
     this.switchTabTo = this.switchTabTo.bind(this);
 
     this.state = {
-      activeTab: Library.Tabs.SavedTracks,
+      activeTab: SpotifySearch.Tabs.SavedTracks,
       savedTracks: []
     };
   }
@@ -49,7 +49,7 @@ export default class Library extends Component {
       return (
         <li className={(isActive) ? 'uk-active' : ''}>
           <a href="#" onClick={() => { this.switchTabTo(tab) }}>
-            {Library.TabLabels[tab]}
+            {SpotifySearch.TabLabels[tab]}
           </a>
         </li>
       );
@@ -58,25 +58,25 @@ export default class Library extends Component {
 
     const GetBody = () => {
       switch(this.state.activeTab) {
-        case Library.Tabs.SavedTracks:
+        case SpotifySearch.Tabs.SavedTracks:
           return (
             <ul className="uk-list">
               {this.state.savedTracks.map((track, i) => {
                 return (
                   <li key={'track-' + i}>
-                    <Track info={track} />
+                    <SpotifyTrack info={track} />
                   </li>
                 );
               })}
             </ul>
           );
 
-        case Library.Tabs.Playlists:
+        case SpotifySearch.Tabs.Playlists:
           return(
             <div>Playlists (coming soon!)</div>
           );
 
-        case Library.Tabs.Search:
+        case SpotifySearch.Tabs.Search:
           return (
             <div>Search (coming soon!)</div>
           );
@@ -86,15 +86,15 @@ export default class Library extends Component {
     };
 
     return (
-      <div className="sp-library">
-        <h2>Library</h2>
+      <div className="sp-spotify-search">
+        <h2>Spotify</h2>
         <ul data-uk-tab>
-          {GetTab(Library.Tabs.SavedTracks)}
-          {GetTab(Library.Tabs.Playlists)}
-          {GetTab(Library.Tabs.Search)}
+          {GetTab(SpotifySearch.Tabs.SavedTracks)}
+          {GetTab(SpotifySearch.Tabs.Playlists)}
+          {GetTab(SpotifySearch.Tabs.Search)}
         </ul>
 
-        <div className="sp-library-body">
+        <div className="sp-spotify-search-body">
           {GetBody()}
         </div>
       </div>

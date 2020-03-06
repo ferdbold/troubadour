@@ -1,9 +1,12 @@
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const express = require('express');
 const mongoDB = require('mongodb').MongoClient;
 const path = require('path');
 
 const AuthRoutes = require('./AuthRoutes');
+const LibraryRoutes = require('./LibraryRoutes');
 
 if (process.env.NODE_ENV !== 'production') {
   const dotenv = require('dotenv');
@@ -20,6 +23,7 @@ module.exports = class Spotpad {
     this.setupExpress();
     this.setupMongo();
     this._authRoutes = new AuthRoutes(this);
+    this._libraryRoutes = new LibraryRoutes(this);
 
     // Catchall handler: makes the server serve React whenever we don't
     // match a route
@@ -33,7 +37,9 @@ module.exports = class Spotpad {
 
   setupExpress() {
     const app = express();
+    app.use(bodyParser());
     app.use(cookieParser());
+    app.use(cors());
 
     // Only used in production, makes the server serve React files
     app.use(express.static(path.join(__dirname, '../client/build')));
