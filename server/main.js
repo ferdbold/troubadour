@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
 
-module.exports = class Spotpad {
+module.exports = class Troubadour {
   constructor() {
     this.setupExpress = this.setupExpress.bind(this);
     this.setupMongo = this.setupMongo.bind(this);
@@ -54,7 +54,7 @@ module.exports = class Spotpad {
     db.connect((err) => {
       if (err === null) {
         console.log('Mongo connected');
-        this._mongo = db.db('spotpad');
+        this._mongo = db.db('troubadour');
       }
     });
   }

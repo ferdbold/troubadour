@@ -1,6 +1,6 @@
 @import '_colors.scss';
 
-.sp-app .sp-spotify-track {
+.t-app .t-spotify-track {
   display: block;
   width: 100%;
   background-color: transparent;
@@ -27,11 +27,11 @@
     padding-right: 0.5em;
   }
 
-  .sp-spotify-track-artist {
+  .t-spotify-track-artist {
     color: darken($text-color, 30%);
   }
 
-  .sp-spotify-track-add {
+  .t-spotify-track-add {
     position: relative;
     float: right;
     top: 4px;

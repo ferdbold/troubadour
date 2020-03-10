@@ -5,8 +5,8 @@ import './Footer.scss';
 export default class Footer extends Component {
   render() {
     return (
-      <div className="sp-footer">
-        Frédéric Bolduc | <a href="https://github.com/ferdbold/spotpad">github</a>
+      <div className="t-footer">
+        Frédéric Bolduc | <a href="https://github.com/ferdbold/troubadour">github</a>
       </div>
     );
   }

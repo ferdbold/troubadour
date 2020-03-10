@@ -1,9 +1,9 @@
 {
-  "name": "spotpad",
+  "name": "troubadour",
   "version": "0.1.0",
-  "description": "Control Spotify with MIDI-enabled devices",
+  "description": "Control your music from the cloud and smart lights with MIDI-enabled devices",
   "main": "index.js",
-  "repository": "git@github.com:ferdbold/spotpad.git",
+  "repository": "git@github.com:ferdbold/troubadour.git",
   "author": "Frédéric Bolduc <me@ferdbold.com>",
   "license": "GPL-3.0-or-later",
   "devDependencies": {

@@ -1,2 +1,2 @@
-const Spotpad = require('./server/main');
-const app = new Spotpad();
+const Troubadour = require('./server/main');
+const app = new Troubadour();

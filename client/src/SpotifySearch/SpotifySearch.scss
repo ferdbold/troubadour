@@ -1,9 +1,9 @@
-.sp-app .sp-spotify-search {
+.t-app .t-spotify-search {
   grid-row: 1 / span 1;
   grid-column: 1 / span 1;
   overflow-y: scroll; // FIXME
 
-  .sp-spotify-search-body {
+  .t-spotify-search-body {
     // overflow-y: scroll; FIXME
   }
 }

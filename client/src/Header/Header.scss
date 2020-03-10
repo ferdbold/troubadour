@@ -1,11 +1,11 @@
 @import '_colors.scss';
 
-.sp-app .sp-header {
+.t-app .t-header {
   background-color: darken($bg-color, 2%);
   padding: 0.5em;
   border-bottom: 1px solid lighten($bg-color, 5%);
 
-  .sp-user-badge {
+  .t-user-badge {
     background-color: $spotify-green;
     border-radius: 4em;
     color: black;
@@ -24,7 +24,7 @@
     }
   }
 
-  .sp-spotify-login {
+  .t-spotify-login {
     padding: 6px 16px;
 
     img {

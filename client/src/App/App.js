@@ -113,7 +113,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className="sp-app">
+      <div className="t-app">
         <Header userData={this.state.userData} />
 
         {(!this.state.accessToken)

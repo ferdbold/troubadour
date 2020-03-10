@@ -13,26 +13,26 @@ export default class Header extends Component {
       : '';
 
     const spotifyLogin = (
-      <a href={process.env.REACT_APP_SERVER_URI + '/login'} className="uk-button sp-spotify-login">
+      <a href={process.env.REACT_APP_SERVER_URI + '/login'} className="uk-button t-spotify-login">
         <img src={imgSpotifyLogo} alt="Spotify Logo" />
         <span>Login with Spotify</span>
       </a>
     );
 
     const userBadge = (
-      <div className="sp-user-badge">
-        <img className="sp-user-avatar" src={avatar} alt={name + ' avatar'} />
+      <div className="t-user-badge">
+        <img className="t-user-avatar" src={avatar} alt={name + ' avatar'} />
         <span>{name}</span>
       </div>
     );
 
     return (
-      <nav className="uk-navbar sp-header">
+      <nav className="uk-navbar t-header">
         <div className="uk-navbar-left">
 
         </div>
         <div className="uk-navbar-center">
-          Spotpad
+          Troubadour
         </div>
         <div className="uk-navbar-right">
           {!_.isEmpty(this.props.userData) ? userBadge : spotifyLogin}

@@ -86,7 +86,7 @@ export default class SpotifySearch extends Component {
     };
 
     return (
-      <div className="sp-spotify-search">
+      <div className="t-spotify-search">
         <h2>Spotify</h2>
         <ul data-uk-tab>
           {GetTab(SpotifySearch.Tabs.SavedTracks)}
@@ -94,7 +94,7 @@ export default class SpotifySearch extends Component {
           {GetTab(SpotifySearch.Tabs.Search)}
         </ul>
 
-        <div className="sp-spotify-search-body">
+        <div className="t-spotify-search-body">
           {GetBody()}
         </div>
       </div>

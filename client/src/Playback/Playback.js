@@ -37,7 +37,7 @@ export default class Playback extends Component {
 
   render() {
     return (
-      <div className="sp-playback">
+      <div className="t-playback">
         <button className="uk-button uk-button-primary" onClick={this.play}>Play</button>
         <button className="uk-button uk-button-primary" onClick={this.pause}>Pause</button>
       </div>

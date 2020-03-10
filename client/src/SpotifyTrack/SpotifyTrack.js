@@ -37,11 +37,11 @@ export default class SpotifyTrack extends Component {
     });
 
     return (
-      <button className="sp-spotify-track" onClick={this.onAddToLibrary}>
-        <span className="uk-badge uk-badge-success sp-spotify-track-add"><span data-uk-icon="plus" /> Add</span>
+      <button className="t-spotify-track" onClick={this.onAddToLibrary}>
+        <span className="uk-badge uk-badge-success t-spotify-track-add"><span data-uk-icon="plus" /> Add</span>
         <img src={this.props.info.track.album.images[2].url} alt="" />
-        <div className="sp-spotify-track-artist">{artistNames.join(', ')}</div>
-        <div className="sp-spotify-track-title">{this.props.info.track.name}</div>
+        <div className="t-spotify-track-artist">{artistNames.join(', ')}</div>
+        <div className="t-spotify-track-title">{this.props.info.track.name}</div>
       </button>
     );
   }
