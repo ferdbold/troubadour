@@ -14,7 +14,7 @@ export default class SpotifyTrack extends Component {
     this.onAddToLibrary = this.onAddToLibrary.bind(this);
   }
 
-  onAddToLibrary() {
+  async onAddToLibrary() {
     const params = {
       method: 'POST',
       headers: {
@@ -27,13 +27,8 @@ export default class SpotifyTrack extends Component {
       })
     };
 
-    fetch(process.env.REACT_APP_SERVER_URI + '/add', params)
-    .then((response) => {
-      // TODO: Implement this
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    await fetch(process.env.REACT_APP_SERVER_URI + '/add', params);
+    // @TODO: Implement some feedback
   }
 
   render() {

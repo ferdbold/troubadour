@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
-import request from 'request';
 import _ from 'lodash';
 
 import Footer from 'Footer/Footer';
@@ -17,7 +16,7 @@ export default class App extends Component {
     super(props);
     this.onDeviceConnected = this.onDeviceConnected.bind(this);
     this.onLaunchpadButtonPressed = this.onLaunchpadButtonPressed.bind(this);
-    this.checkSpotifyConnection = this.checkSpotifyConnection.bind(this);
+    this.getAccessToken = this.getAccessToken.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
 
     this._cookies = new Cookies();
@@ -32,15 +31,19 @@ export default class App extends Component {
       deviceName: '',
       accessToken: '',
       userId: '',
-      // TODO: fix caching issue
-      // accessToken: this._cookies.get('access_token') || '',
       userData: {}
     };
   }
 
   componentDidMount() {
     if (!this.state.accessToken) {
-      this.checkSpotifyConnection();
+      // Go fetch a token if we just got through authorization
+      const queryString = new URLSearchParams(window.location.search);
+      const code = queryString.get('code'),
+            state = queryString.get('state');
+      if (code && state) {
+        this.getAccessToken(code, state);
+      }
     }
     else {
       this.fetchUserData();
@@ -53,52 +56,47 @@ export default class App extends Component {
     }
   }
 
-  checkSpotifyConnection() {
-    console.log('Checking connection to Spotify...');
+  async getAccessToken(code, state) {
+    const response = await fetch(process.env.REACT_APP_SERVER_URI + '/get_token', {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      cache: 'no-cache',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code: code,
+        state: state
+      })
+    });
 
-    // Fetch access token from either cookies or URL param
-    const queryString = new URLSearchParams(window.location.search);
-    let accessToken = queryString.get('access_token');
-    const userId = queryString.get('user_id');
-    const accessTokenCookie = '';
-    // TODO: fix caching issue
-    // const accessTokenCookie = this._cookies.get('access_token');
-    if (accessToken || accessTokenCookie) {
-      if (accessToken !== null && accessTokenCookie !== accessToken) {
-        // TODO: fix caching issue
-        // this._cookies.set('access_token', accessToken);
-      }
-      else {
-        accessToken = accessTokenCookie;
+    const json = await response.json();
+    if (json.access_token && json.refresh_token && json.user_id) {
+      // Clear querystring
+      if (window.history.pushState) {
+        const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({path:newurl}, '', newurl);
       }
 
       this.setState({
-        accessToken: accessToken,
-        userId: userId
+        accessToken: json.access_token,
+        refreshToken: json.refresh_token,
+        userId: json.user_id
       });
-
-      return;
-    }
-
-    // Go fetch a token if we just got through authorization
-    const code = queryString.get('code'),
-          state = queryString.get('state');
-    if (code && state) {
-      window.location = process.env.REACT_APP_SERVER_URI +
-                        '/get_token?code=' + code + '&state=' + state;
     }
   }
 
-  fetchUserData() {
-    const params = {
-      url: 'https://api.spotify.com/v1/me',
+  async fetchUserData() {
+    const response = await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
       headers: { 'Authorization': 'Bearer ' + this.state.accessToken },
       json: true
-    };
-
-    request.get(params, (error, response, body) => {
-      this.setState({ userData: body });
     });
+
+    const json = await response.json();
+    this.setState({ userData: json });
   }
 
   onDeviceConnected(name) {

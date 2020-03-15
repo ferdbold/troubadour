@@ -1,6 +1,6 @@
+const fetch = require('node-fetch');
 const mongoose = require('mongoose');
 const querystring = require('querystring');
-const request = require('request');
 
 const UserSchema = require('./schemas/User');
 
@@ -24,7 +24,7 @@ module.exports = class AuthRoutes {
     this._server = server;
 
     server._express.get('/login', this.onLogin);
-    server._express.get('/get_token', this.onGetToken);
+    server._express.post('/get_token', this.onGetToken);
   }
 
   // Login the user to Spotify and get an auth token
@@ -51,9 +51,9 @@ module.exports = class AuthRoutes {
   };
 
   // Convert the Spotify auth token to an access token
-  onGetToken(req, res) {
-    const code = req.query.code || null;
-    const state = req.query.state || null;
+  async onGetToken(req, res) {
+    const code = req.body.code || null;
+    const state = req.body.state || null;
     const storedState = req.cookies ? req.cookies[AuthRoutes.STATE_KEY] : null;
 
     // Early return if state is mismatched
@@ -68,65 +68,57 @@ module.exports = class AuthRoutes {
     }
 
     res.clearCookie(AuthRoutes.STATE_KEY);
-    const authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        grant_type: 'authorization_code',
-        redirect_uri: process.env.REDIRECT_URI
-      },
+
+    let body = new URLSearchParams();
+    body.append('code', code);
+    body.append('grant_type', 'authorization_code');
+    body.append('redirect_uri', process.env.REDIRECT_URI);
+
+    const authResponse = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      body: body,
       headers: {
         'Authorization': 'Basic ' + (new Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
       },
       json: true
-    };
+    });
 
-    request.post(authOptions, (error, response, body) => {
-      if (!error && response.statusCode === 200) {
+    // Early return on bad auth
+    if (authResponse.status !== 200) {
+      res.redirect(process.env.REDIRECT_URI + '?' +
+        querystring.stringify({
+          error: 'invalid_token'
+        })
+      );
+      return;
+    }
 
-        const accessToken = body.access_token,
-              refreshToken = body.refresh_token;
+    const authResponseJson = await authResponse.json();
+    const accessToken = authResponseJson.access_token,
+          refreshToken = authResponseJson.refresh_token;
 
-        // Store user in users if it doesn't exist
-        const params = {
-          url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + accessToken },
-          json: true
-        };
+    // Store user in users if it doesn't exist
+    const userInfoResponse = await fetch('https://api.spotify.com/v1/me', {
+      method: 'GET',
+      headers: { 'Authorization': 'Bearer ' + accessToken },
+      json: true
+    });
 
-        request.get(params, async (error, response, body) => {
-          const User = mongoose.model('User', UserSchema);
-          let user = await User.findOne({ spotify_id: body.id });
+    const User = mongoose.model('User', UserSchema);
+    let user = await User.findOne({ spotify_id: userInfoResponse.body.id });
 
-          // Create user if it doesn't exist
-          if (user === null) {
-            user = await new User({
-              spotify_id: body.id,
-              name: body.display_name
-            }).save();
-          }
+    // Create user if it doesn't exist
+    if (user === null) {
+      user = await new User({
+        spotify_id: body.id,
+        name: body.display_name
+      }).save();
+    }
 
-          // Redirect to home
-          // @TODO: Handle this like a regular POST request instead of
-          // exposing access tokens in the querystring
-          res.redirect(process.env.REDIRECT_URI + '?' +
-            querystring.stringify({
-              access_token: accessToken,
-              refresh_token: refreshToken,
-              user_id: user.id
-            })
-          );
-        });
-      }
-
-      // Bad auth
-      else {
-        res.redirect(process.env.REDIRECT_URI + '?' +
-          querystring.stringify({
-            error: 'invalid_token'
-          })
-        );
-      }
+    res.send({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user_id: user.id
     });
   }
 }

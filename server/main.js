@@ -1,6 +1,5 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -38,7 +37,16 @@ module.exports = class Troubadour {
     const app = express();
     app.use(bodyParser());
     app.use(cookieParser());
-    app.use(cors());
+
+    // Enable CORS on dev environments
+    if (process.env.NODE_ENV !== 'production') {
+      app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        res.header('Access-Control-Allow-Credentials', true);
+        next();
+      });
+    }
 
     // Only used in production, makes the server serve React files
     app.use(express.static(path.join(__dirname, '../client/build')));
