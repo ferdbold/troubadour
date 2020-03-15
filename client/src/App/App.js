@@ -31,6 +31,7 @@ export default class App extends Component {
     this.state = {
       deviceName: '',
       accessToken: '',
+      userId: '',
       // TODO: fix caching issue
       // accessToken: this._cookies.get('access_token') || '',
       userData: {}
@@ -58,6 +59,7 @@ export default class App extends Component {
     // Fetch access token from either cookies or URL param
     const queryString = new URLSearchParams(window.location.search);
     let accessToken = queryString.get('access_token');
+    const userId = queryString.get('user_id');
     const accessTokenCookie = '';
     // TODO: fix caching issue
     // const accessTokenCookie = this._cookies.get('access_token');
@@ -70,7 +72,11 @@ export default class App extends Component {
         accessToken = accessTokenCookie;
       }
 
-      this.setState({ accessToken: accessToken });
+      this.setState({
+        accessToken: accessToken,
+        userId: userId
+      });
+
       return;
     }
 
@@ -118,7 +124,12 @@ export default class App extends Component {
 
         {(!this.state.accessToken)
           ? <Login />
-          : <ApiContext.Provider value={{ accessToken: this.state.accessToken }}>
+          : <ApiContext.Provider
+              value={{
+                accessToken: this.state.accessToken,
+                userId: this.state.userId
+              }}
+            >
               <Home />
             </ApiContext.Provider>}
 

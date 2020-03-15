@@ -1,3 +1,3 @@
 import React from 'react';
 
-export default React.createContext({ accessToken: '' });
+export default React.createContext({ accessToken: '', userId: '' });

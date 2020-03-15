@@ -2,7 +2,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
-const mongoDB = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 const path = require('path');
 
 const AuthRoutes = require('./AuthRoutes');
@@ -17,7 +17,6 @@ module.exports = class Troubadour {
   constructor() {
     this.setupExpress = this.setupExpress.bind(this);
     this.setupMongo = this.setupMongo.bind(this);
-    this.closeMongo = this.closeMongo.bind(this);
     this.launch = this.launch.bind(this);
 
     this.setupExpress();
@@ -50,17 +49,7 @@ module.exports = class Troubadour {
   }
 
   setupMongo() {
-    const db = new mongoDB(process.env.DATABASE_URI, { useNewUrlParser: true });
-    db.connect((err) => {
-      if (err === null) {
-        console.log('Mongo connected');
-        this._mongo = db.db('troubadour');
-      }
-    });
-  }
-
-  closeMongo() {
-    this._mongo.close();
+    mongoose.connect(process.env.DATABASE_URI, { useNewUrlParser: true });
   }
 
   launch() {

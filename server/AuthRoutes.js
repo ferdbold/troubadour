@@ -1,5 +1,8 @@
+const mongoose = require('mongoose');
 const querystring = require('querystring');
 const request = require('request');
+
+const UserSchema = require('./schemas/User');
 
 module.exports = class AuthRoutes {
   static STATE_KEY = 'spotify_auth_state';
@@ -84,15 +87,6 @@ module.exports = class AuthRoutes {
         const accessToken = body.access_token,
               refreshToken = body.refresh_token;
 
-        const RedirectToHome = () => {
-          res.redirect(process.env.REDIRECT_URI + '?' +
-            querystring.stringify({
-              access_token: accessToken,
-              refresh_token: refreshToken
-            })
-          );
-        }
-
         // Store user in users if it doesn't exist
         const params = {
           url: 'https://api.spotify.com/v1/me',
@@ -100,27 +94,28 @@ module.exports = class AuthRoutes {
           json: true
         };
 
-        request.get(params, (error, response, body) => {
-          const users = this._server._mongo.collection('users');
+        request.get(params, async (error, response, body) => {
+          const User = mongoose.model('User', UserSchema);
+          let user = await User.findOne({ spotify_id: body.id });
 
           // Create user if it doesn't exist
-          users.find({ spotify_id: body.id }).count(true, {}, (err, result) => {
-            if (result === 0) {
-              const newUser = {
-                spotify_id: body.id,
-                name: body.display_name
-              };
+          if (user === null) {
+            user = await new User({
+              spotify_id: body.id,
+              name: body.display_name
+            }).save();
+          }
 
-              users.insertOne(newUser, (err, result) => {
-                RedirectToHome();
-              });
-            }
-
-            // Otherwise, redirect directly
-            else {
-              RedirectToHome();
-            }
-          });
+          // Redirect to home
+          // @TODO: Handle this like a regular POST request instead of
+          // exposing access tokens in the querystring
+          res.redirect(process.env.REDIRECT_URI + '?' +
+            querystring.stringify({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+              user_id: user.id
+            })
+          );
         });
       }
 

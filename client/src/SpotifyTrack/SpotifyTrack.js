@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import ApiContext from 'App/ApiContext';
+
 import './SpotifyTrack.scss';
 
 export default class SpotifyTrack extends Component {
+  static contextType = ApiContext;
+
   constructor(props) {
     super(props);
 
@@ -17,6 +21,7 @@ export default class SpotifyTrack extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        user_id: this.context.userId,
         type: 'spotify',
         id: this.props.info.track.id
       })
