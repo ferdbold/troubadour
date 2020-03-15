@@ -23,19 +23,16 @@ export default class SpotifySearch extends Component {
     };
   }
 
-  componentDidMount() {
-    const params = {
-      url: 'https://api.spotify.com/v1/me/tracks',
+  async componentDidMount() {
+    const response = await fetch('https://api.spotify.com/v1/me/tracks', {
+      method: 'GET',
       headers: {
         authorization: 'Bearer ' + this.context.accessToken
       }
-    };
-
-    request.get(params, (error, response, body) => {
-      if (!error) {
-        this.setState({ savedTracks: JSON.parse(body).items });
-      }
     });
+
+    const json = await response.json();
+    this.setState({ savedTracks: json.items });
   }
 
   switchTabTo(newTab) {

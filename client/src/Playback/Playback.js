@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import request from 'request';
 
 import ApiContext from 'App/ApiContext';
 
@@ -16,23 +15,19 @@ export default class Playback extends Component {
   }
 
   play() {
-    const params = {
-      url: 'https://api.spotify.com/v1/me/player/play',
+    fetch('https://api.spotify.com/v1/me/player/play', {
+      method: 'PUT',
       headers: { 'Authorization': 'Bearer ' + this.context.accessToken },
       json: true
-    };
-
-    request.put(params);
+    });
   }
 
   pause() {
-    const params = {
-      url: 'https://api.spotify.com/v1/me/player/pause',
+    fetch('https://api.spotify.com/v1/me/player/pause', {
+      method: 'PUT',
       headers: { 'Authorization': 'Bearer ' + this.context.accessToken },
       json: true
-    };
-
-    request.put(params);
+    });
   }
 
   render() {
