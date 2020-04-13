@@ -1,3 +1,0 @@
-# Troubadour
-
-README coming soon

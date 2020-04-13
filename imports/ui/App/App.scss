@@ -1,0 +1,38 @@
+@import '{}/imports/ui/_colors.scss';
+
+.t-app {
+  background-color: $bg-color;
+  color: $text-color;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  h1, h2, h3, h4, h5, h6, p, a, div, span {
+    color: $text-color;
+  }
+
+  .t-app-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+
+  .t-spotify-login {
+    padding: 12px 24px 12px 16px;
+    border: none;
+    border-radius: 4em;
+    background-color: $spotify-green;
+    transition: background-color 0.3s;
+    color: black;
+
+    img {
+      width: 32px;
+      margin-right: 12px;
+      position: relative;
+      top: -2px;
+    }
+
+    &:hover, &:focus {
+      background-color: lighten($spotify-green, 10%);
+    }
+  }
+}

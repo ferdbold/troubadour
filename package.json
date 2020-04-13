@@ -1,28 +1,28 @@
 {
   "name": "troubadour",
-  "version": "0.1.0",
-  "description": "Control your music from the cloud and smart lights with MIDI-enabled devices",
-  "main": "index.js",
-  "repository": "git@github.com:ferdbold/troubadour.git",
-  "author": "Frédéric Bolduc <me@ferdbold.com>",
-  "license": "GPL-3.0-or-later",
-  "devDependencies": {
-    "concurrently": "^5.1.0",
-    "dotenv": "^8.2.0"
-  },
+  "private": true,
   "scripts": {
-    "start": "yarn run server",
-    "dev-start": "concurrently \"yarn run server\" \"yarn --cwd ./client start\" \"mongo\"",
-    "server": "node index.js",
-    "heroku-postbuild": "cd client && yarn && yarn run build"
+    "dev": "meteor --inspect --settings settings.dev.json",
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
-    "express": "^4.17.1",
-    "mongodb": "^3.5.4",
-    "mongoose": "^5.9.4",
-    "node-fetch": "^2.6.0",
-    "querystring": "^0.2.0"
+    "@babel/runtime": "^7.9.2",
+    "jquery": "^3.5.0",
+    "lodash": "^4.17.15",
+    "meteor-node-stubs": "^0.4.1",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "uikit": "^3.3.7",
+    "universal-cookie": "^4.0.3"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.jsx",
+      "server": "server/main.js"
+    },
+    "testModule": "tests/main.js"
   }
 }
