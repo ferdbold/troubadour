@@ -1,0 +1,4 @@
+node_modules/
+
+# Development settings
+settings.dev.json

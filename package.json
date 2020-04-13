@@ -1,0 +1,28 @@
+{
+  "name": "troubadour",
+  "private": true,
+  "scripts": {
+    "dev": "meteor --inspect --settings settings.dev.json",
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.9.2",
+    "jquery": "^3.5.0",
+    "lodash": "^4.17.15",
+    "meteor-node-stubs": "^0.4.1",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "uikit": "^3.3.7",
+    "universal-cookie": "^4.0.3"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.jsx",
+      "server": "server/main.js"
+    },
+    "testModule": "tests/main.js"
+  }
+}

@@ -1,0 +1,9 @@
+.t-app .t-home {
+  flex: 1;
+  padding: 1em;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 1fr 50% 40px;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+}
