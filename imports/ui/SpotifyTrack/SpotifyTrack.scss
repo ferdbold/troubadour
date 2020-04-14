@@ -2,7 +2,6 @@
 
 .t-app .t-spotify-track {
   display: block;
-  width: 100%;
   background-color: transparent;
   border: 1px solid transparentize($button-bg-color, 0.8);
   border-radius: 5px;
@@ -16,7 +15,7 @@
     text-decoration: none;
     border-color: $button-bg-color;
 
-    .sp-spotify-track-add {
+    .t-spotify-track-add {
       opacity: 1;
     }
   }
@@ -34,10 +33,24 @@
   .t-spotify-track-add {
     position: relative;
     float: right;
-    top: 4px;
-    padding: 1em;
+    height: 30px;
+    border: none;
+    top: 6px;
+    padding: 0 1em;
     opacity: 0;
     background-color: $spotify-green;
     transition: opacity 0.3s;
+  }
+
+  .t-spotify-track-add-dropdown {
+    color: black;
+
+    > ul {
+      padding-left: 0;
+
+      input {
+        margin-right: 5px;
+      }
+    }
   }
 }

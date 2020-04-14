@@ -1,11 +1,11 @@
 import { Class, Enum } from 'meteor/jagi:astronomy';
 
-const TrackSourceType = Enum.create({
+export const TrackSourceType = Enum.create({
   name: 'TrackSourceType',
   identifiers: [ 'SPOTIFY', 'YOUTUBE' ]
 });
 
-const TrackSource = Class.create({
+export const TrackSource = Class.create({
   name: 'TrackSource',
 
   fields: {

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import _ from 'lodash';
 
-import { User } from '/imports/api/users';
+import { Playlist } from '/imports/api/playlist/playlist';
+import { User } from '/imports/api/user/user';
 
 import SpotifyTrack from '/imports/ui/SpotifyTrack/SpotifyTrack.jsx';
 
@@ -45,7 +46,7 @@ class SpotifySearch extends Component {
       /* eslint-disable */
       return (
         <li className={(isActive) ? 'uk-active' : ''}>
-          <a href="#" onClick={() => { this.switchTabTo(tab) }}>
+          <a href="#" onClick={(e) => { e.preventDefault(); this.switchTabTo(tab); }}>
             {SpotifySearch.TabLabels[tab]}
           </a>
         </li>
@@ -61,7 +62,7 @@ class SpotifySearch extends Component {
               {this.state.savedTracks.map((track, i) => {
                 return (
                   <li key={'track-' + i}>
-                    <SpotifyTrack info={track} />
+                    <SpotifyTrack info={track} playlists={this.props.playlists} />
                   </li>
                 );
               })}
@@ -100,9 +101,11 @@ class SpotifySearch extends Component {
 }
 
 export default withTracker(() => {
+  Meteor.subscribe('playlists');
   Meteor.subscribe('user');
 
   return {
+    playlists: Playlist.find({ owner_id: Meteor.userId() }).fetch(),
     user: User.findOne({ _id: Meteor.userId() })
   };
 })(SpotifySearch);

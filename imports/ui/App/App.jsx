@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import _ from 'lodash';
 
-import { User } from '/imports/api/users';
+import { User } from '/imports/api/user/user';
 
 import Footer from '/imports/ui/Footer/Footer.jsx';
 import Header from '/imports/ui/Header/Header.jsx';

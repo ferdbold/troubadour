@@ -10,16 +10,3 @@ export const User = Class.create({
     services:   Object
   }
 });
-
-if (Meteor.isServer) {
-  Meteor.publish('user', () => {
-    const options = {
-      fields: {
-        'name': 1,
-        'services.spotify': 1
-      }
-    };
-
-    return User.find({ _id: Meteor.userId() }, options);
-  });
-}

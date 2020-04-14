@@ -1,3 +1,5 @@
+import '/imports/startup/client'
+
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { render } from 'react-dom';

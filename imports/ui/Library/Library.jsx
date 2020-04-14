@@ -3,7 +3,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import _ from 'lodash';
 
 import { Playlist } from '/imports/api/playlist/playlist';
-import { User } from '/imports/api/users';
+import { User } from '/imports/api/user/user';
 
 import './Library.scss';
 
@@ -41,8 +41,8 @@ class Library extends Component {
     const GetTab = (playlist) => {
       const isActive = (this.state.activePlaylist === playlist._id);
       return (
-        <li key={'playlist-' + playlist._id} className={(isActive) ? 'uk-active' : ''}>
-          <a href="#" onClick={() => { this.switchToPlaylist(playlist); }}>
+        <li key={'playlist-tab-' + playlist._id} className={(isActive) ? 'uk-active' : ''}>
+          <a href="#" onClick={(e) => { e.preventDefault(); this.switchToPlaylist(playlist); }}>
             {playlist.name}
           </a>
         </li>
@@ -51,7 +51,20 @@ class Library extends Component {
 
     const GetBody = () => {
       const activePlaylist = this.getActivePlaylist();
-      return (activePlaylist) ? <p>{activePlaylist.name}</p> : '';
+      return (activePlaylist)
+        ? <div>
+            <h3>{activePlaylist.name}</h3>
+            <ul className="uk-list">
+              {activePlaylist.tracks.map((track, i) => {
+                return (
+                  <li key={'playlist-track-' + i}>
+                    {track.title}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        : null;
     };
 
     return (
