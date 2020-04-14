@@ -6,18 +6,8 @@ export const User = Class.create({
   collection: Meteor.users,
 
   fields: {
-    name: {
-      type: String,
-      default: ''
-    },
-
-    profile: {
-      type: Object
-    },
-
-    services: {
-      type: Object
-    }
+    name:       { type: String, default: '' },
+    services:   Object
   }
 });
 
