@@ -1,6 +1,7 @@
 .t-app .t-home {
   flex: 1;
   padding: 1em;
+  min-height: 0; // Prevents grid inside flex rendering bug
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 1fr 50% 40px;
