@@ -1,4 +1,22 @@
+$LAUNCHPAD_GRID_SIZE: 8;
+
 .t-app .t-launchpad-view {
   grid-row: 1 / span 2;
   grid-column: 2 / span 1;
+
+  .t-launchpad-view-grid {
+    display: grid;
+    grid-template-columns: repeat($LAUNCHPAD_GRID_SIZE, 1fr);
+    grid-template-rows: repeat($LAUNCHPAD_GRID_SIZE, 1fr);
+    grid-column-gap: 0.5em;
+    grid-row-gap: 0.5em;
+  }
+
+  .t-launchpad-view-cell {
+    grid-row: span 1;
+    grid-column: span 1;
+    border: 2px solid grey;
+    border-radius: 8px;
+    padding-bottom: 100%;
+  }
 }
